@@ -1,0 +1,31 @@
+---
+- name: Install and configure OpenvSwitch Error Watcher
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install Python 3
+      package:
+        name: python3
+        state: present
+
+    - name: Copy script file
+      copy:
+        src: script.py
+        dest: /usr/local/bin/kcs7050303.py
+        mode: "0755"
+
+    - name: Create systemd service unit
+      copy:
+        src: kcs7050303.service
+        dest: /etc/systemd/system/kcs7050303.service
+        mode: "0644"
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Start and enable the service
+      systemd:
+        name: kcs7050303.service
+        state: started
+        enabled: yes

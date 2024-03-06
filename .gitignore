@@ -1,0 +1,12 @@
+*.pyc
+__pycache__/
+.dockerignore
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+.vscode/
+.idea/
+*.swp
+.DS_Store
+*.log
