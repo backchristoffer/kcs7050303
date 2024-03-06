@@ -2,6 +2,8 @@ apiVersion: machineconfiguration.openshift.io/v1
 kind: MachineConfig
 metadata:
   name: kcs7050303
+  labels:
+    machineconfiguration.openshift.io/role: master
 spec:
   config:
     ignition:
@@ -12,17 +14,13 @@ spec:
           enabled: true
           contents: |
             [Unit]
-            Description=Move OpenvSwitch config files and reboot
-            After=network-online.target
+            Description=Remove the leftover network files
+            Before=NetworkManager.service
 
             [Service]
             Type=oneshot
-            ExecStart=/bin/bash -c 'journalctl -u ovs-configuration.service | grep "ERROR: could not find ovs-if-br-ex conn file after cloning" >/dev/null && \
-              mv /etc/NetworkManager/system-connections/ovs-if-br-ex* /root && \
-              reboot'
+            ExecStart=/bin/bash -c 'rm -f /run/configure-ovs-boot-done && mv /etc/NetworkManager/system-connections/ovs-if-br-ex* /root'
             StandardOutput=journal
 
             [Install]
             WantedBy=multi-user.target
-  osImageURL: quay.io/openshift-release-dev/ocp-release:latest
-  kernelType: ""
