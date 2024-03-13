@@ -19,7 +19,7 @@ spec:
 
             [Service]
             Type=oneshot
-            ExecStart=/bin/bash -c 'rm -f /run/configure-ovs-boot-done && mv /etc/NetworkManager/system-connections/ovs-if-br-ex* /root'
+            ExecStart=/bin/bash -x -c 'rm -f /run/configure-ovs-boot-done && mv /etc/NetworkManager/system-connections/ovs-if-br-ex* /root 2>dev/null'
             StandardOutput=journal
 
             [Install]
